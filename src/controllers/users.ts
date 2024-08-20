@@ -3,9 +3,9 @@ import argon2 from 'argon2';
 import Joi from "joi";
 import { loginUserValidationObject, postUserValidationObject, updateUserValidationObject } from "../middlewares/users";
 import { addQuery, deleteQuery, getOneQuery, getOneUserByItsUsernameQuery, getQuery, updateQuery } from "../models/SQL/sqlQueries";
+import { ok } from "./controller";
 
 const table = "UTILISATEUR";
-const ok = true;
 
 export const postUser = async (req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined> => {
   const { body } = req;
@@ -41,14 +41,14 @@ export const getUsers = (req: Request, res: Response) => {
   const { id } = req.params;
   if (!id) {
     getQuery(table).then(([results]) => {
-      const resultsWithoutPassword = results.map((result: { username: string, role_id: number, nom: string, prenom: string, hashed_password: string; }) => { return { username: result.username, nom: result.nom, prenom: result.prenom, role_id: result.role_id }; });
+      const resultsWithoutPassword = results.map((result: { utilisateur_id: string, username: string, role_id: number, nom: string, prenom: string, hashed_password: string; }) => { return { utilisateur_id: result.utilisateur_id, username: result.username, nom: result.nom, prenom: result.prenom, role_id: result.role_id }; });
       res.status(200).json({ ok, results: resultsWithoutPassword });
     }).catch((error) => {
       return res.status(500).json({ ok: !ok, error });
     });
   } else {
     getOneQuery(table, id).then(([results]) => {
-      const resultsWithoutPassword = results.map((result: { username: string, role_id: number, nom: string, prenom: string, hashed_password: string; }) => { return { username: result.username, nom: result.nom, prenom: result.prenom, role_id: result.role_id }; });
+      const resultsWithoutPassword = results.map((result: { utilisateur_id: string, username: string, role_id: number, nom: string, prenom: string, hashed_password: string; }) => { return { utilisateur_id: result.utilisateur_id, username: result.username, nom: result.nom, prenom: result.prenom, role_id: result.role_id }; });
       res.status(200).json({ ok, results: resultsWithoutPassword });
     }).catch((error) => {
       return res.status(500).json({ ok: !ok, error });
@@ -59,11 +59,11 @@ export const getUsers = (req: Request, res: Response) => {
 export const updateUser = (req: Request, res: Response) => {
   const { id } = req.params;
   if (!id) {
-    res.status(403).json({ ok: !ok, message: "No Id provided" });
+    return res.status(403).json({ ok: !ok, message: "No Id provided" });
   }
   getOneQuery(table, id).then(([results]) => {
     if (!results.length) {
-      res.status(404).json({ ok: !ok, message: "no record" });
+      return res.status(404).json({ ok: !ok, message: "no record" });
     }
 
     const error: Joi.ValidationError | undefined = Joi.object(updateUserValidationObject).validate(req.body, { abortEarly: false }).error;
