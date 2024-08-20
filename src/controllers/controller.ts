@@ -4,86 +4,78 @@ import Joi from "joi";
 
 export const ok = true;
 
+const handleError = (res: Response, error: any, statusCode: number = 500) => {
+  console.error(error);
+  return res.status(statusCode).json({ ok: !ok, error });
+};
+
 export const getController = (req: Request, res: Response, table: string) => {
   const { id } = req.params;
 
-  if (!id) {
-    getQuery(table)
-      .then(([results]) => {
-        return res.status(200).json({ ok, results });
-      })
-      .catch((error) => {
-        console.error(error);
-        return res.status(500).json({ ok: !ok, error });
-      });
-  } else {
+  const query = id ? getOneQuery(table, id) : getQuery(table);
 
-    getOneQuery(table, id)
-      .then(([results]) => {
-        if (!results.length) {
-          return res.status(404).json({ ok: !ok, message: "no record" });
-        }
-        return res.status(200).json({ ok, results });
-      })
-      .catch((error) => {
-        console.error(error);
-        return res.status(500).json({ ok: !ok, error });
-      });
-  }
+  query
+    .then(([results]) => {
+      if (id && !results.length) {
+        return res.status(404).json({ ok: !ok, message: "No record found" });
+      }
+      return res.status(200).json({ ok, results });
+    })
+    .catch((error) => handleError(res, error));
 };
 
-export const postController = (req: Request, res: Response, table: string, joiMiddleware: any) => {
+export const postController = (req: Request, res: Response, table: string, joiSchema: any) => {
   const { body } = req;
-  const error = Joi.object(joiMiddleware).validate(body, { abortEarly: false }).error;
+  const { error } = Joi.object(joiSchema).validate(body, { abortEarly: false });
   if (error) {
-    return res.status(403).json({ ok: !ok, error });
+    return res.status(422).json({ ok: !ok, error });
   }
-  addQuery(table, body).then(([result]) => {
-    return res.status(201).json({ ok, result, body });
-  }).catch((error) => {
-    return res.status(500).json({ ok: !ok, error });
-  });
+
+  addQuery(table, body)
+    .then(([result]) => res.status(201).json({ ok, result, body }))
+    .catch((error) => handleError(res, error));
 };
 
-export const updateController = (req: Request, res: Response, table: string, joiMiddleware: any) => {
+export const updateController = (req: Request, res: Response, table: string, joiSchema: any) => {
   const { body } = req;
   const { id } = req.params;
+
   if (!id) {
-    return res.status(500).json({ ok: !ok, message: "no id provided" });
-  };
-  getOneQuery(table, id).then(([results]) => {
-    if (!results.length) {
-      return res.status(404).json({ ok: !ok, message: "no record" });
-    }
-    const error = Joi.object(joiMiddleware).validate(body, { abortEarly: false }).error;
-    if (error) {
-      return res.status(422).json({ ok: !ok, error });
-    }
-    updateQuery(table, id, body).then(([result]) => {
-      return res.status(200).json({ ok, result });
-    }).catch((error) => {
-      return res.status(500).json({ ok: !ok, error });
-    });
-  }).catch((error) => {
-    return res.status(500).json({ ok: !ok, error });
-  });;
+    return res.status(400).json({ ok: !ok, message: "No ID provided" });
+  }
+
+  getOneQuery(table, id)
+    .then(([results]) => {
+      if (!results.length) {
+        return res.status(404).json({ ok: !ok, message: "No record found" });
+      }
+
+      const { error } = Joi.object(joiSchema).validate(body, { abortEarly: false });
+      if (error) {
+        return res.status(422).json({ ok: !ok, error });
+      }
+
+      return updateQuery(table, id, body);
+    })
+    .then(([result]) => res.status(200).json({ ok, result }))
+    .catch((error) => handleError(res, error));
 };
 
 export const deleteController = (req: Request, res: Response, table: string) => {
   const { id } = req.params;
+
   if (!id) {
-    return res.status(500).json({ ok: !ok, message: "no id provided" });
-  };
-  getOneQuery(table, id).then(([results]) => {
-    if (!results.length) {
-      return res.status(404).json({ ok: !ok, message: "no record" });
-    }
-    deleteQuery(table, id).then(([result]) => {
-      return res.status(201).json({ ok, result });
-    }).catch((error) => {
-      return res.status(500).json({ ok: !ok, error });
-    });
-  }).catch((error) => {
-    return res.status(500).json({ ok: !ok, error });
-  });
+    return res.status(400).json({ ok: !ok, message: "No ID provided" });
+  }
+
+  getOneQuery(table, id)
+    .then(([results]) => {
+      if (!results.length) {
+        return res.status(404).json({ ok: !ok, message: "No record found" });
+      }
+
+      return deleteQuery(table, id);
+    })
+    .then(([result]) => res.status(200).json({ ok, result }))
+    .catch((error) => handleError(res, error));
 };
