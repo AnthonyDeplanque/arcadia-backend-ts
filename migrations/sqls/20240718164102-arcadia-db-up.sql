@@ -54,13 +54,13 @@ CREATE TABLE IF NOT EXISTS ROLE (
 
 
 CREATE TABLE IF NOT EXISTS UTILISATEUR (
-  user_id INT NOT NULL AUTO_INCREMENT,
+  utilisateur_id INT NOT NULL AUTO_INCREMENT,
   username VARCHAR(150) NOT NULL,
   hashed_password VARCHAR(150) NOT NULL,
   nom VARCHAR(50) NOT NULL,
   prenom VARCHAR(50) NOT NULL,
   role_id INT NOT NULL,
-  PRIMARY KEY (user_id),
+  PRIMARY KEY (utilisateur_id),
   FOREIGN KEY (role_id) REFERENCES ROLE(role_id)
 );
 
@@ -84,10 +84,10 @@ CREATE TABLE IF NOT EXISTS RAPPORT_VETERINAIRE (
   nourriture VARCHAR(150),
   quantite DECIMAL(15, 2),
   detail VARCHAR(500),
-  user_id INT NOT NULL,
+  utilisateur_id INT NOT NULL,
   animal_id INT NOT NULL,
   PRIMARY KEY (rapport_veterinaire_id),
-  FOREIGN KEY (user_id) REFERENCES UTILISATEUR(user_id),
+  FOREIGN KEY (utilisateur_id) REFERENCES UTILISATEUR(utilisateur_id),
   FOREIGN KEY (animal_id) REFERENCES ANIMAL(animal_id)
 );
 

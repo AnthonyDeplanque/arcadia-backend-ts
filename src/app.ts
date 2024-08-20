@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 // import cors = require('cors');
 import path from 'path';
+import { router } from "./routes";
 
 
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 
 // router(app);
+router(app);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
