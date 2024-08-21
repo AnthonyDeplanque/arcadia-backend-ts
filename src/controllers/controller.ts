@@ -1,11 +1,5 @@
 import { Request, Response } from 'express';
-import {
-  addQuery,
-  deleteQuery,
-  getOneQuery,
-  getQuery,
-  updateQuery,
-} from '../models/SQL/sqlQueries';
+import { addQuery, deleteQuery, getOneQuery, getQuery, updateQuery } from '../models/SQL/sqlQueries';
 import Joi from 'joi';
 
 export const ok = true;
@@ -20,7 +14,7 @@ export const getController = (req: Request, res: Response, table: string) => {
 
   const query = id ? getOneQuery(table, id) : getQuery(table);
 
-  query
+  return query
     .then(([results]) => {
       if (id && !results.length) {
         return res.status(404).json({ ok: !ok, message: 'No record found' });
@@ -30,12 +24,7 @@ export const getController = (req: Request, res: Response, table: string) => {
     .catch((error) => handleError(res, error));
 };
 
-export const postController = (
-  req: Request,
-  res: Response,
-  table: string,
-  joiSchema: any
-) => {
+export const postController = (req: Request, res: Response, table: string, joiSchema: any) => {
   const { body } = req;
   const { error } = Joi.object(joiSchema).validate(body, { abortEarly: false });
   if (error) {
@@ -47,12 +36,7 @@ export const postController = (
     .catch((error) => handleError(res, error));
 };
 
-export const updateController = (
-  req: Request,
-  res: Response,
-  table: string,
-  joiSchema: any
-) => {
+export const updateController = (req: Request, res: Response, table: string, joiSchema: any) => {
   const { body } = req;
   const { id } = req.params;
 
@@ -79,11 +63,7 @@ export const updateController = (
     .catch((error) => handleError(res, error));
 };
 
-export const deleteController = (
-  req: Request,
-  res: Response,
-  table: string
-) => {
+export const deleteController = (req: Request, res: Response, table: string) => {
   const { id } = req.params;
 
   if (!id) {

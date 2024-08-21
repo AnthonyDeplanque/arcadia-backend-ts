@@ -1,11 +1,7 @@
 import { Request, Response } from 'express';
 import argon2 from 'argon2';
 import Joi from 'joi';
-import {
-  loginUserValidationObject,
-  postUserValidationObject,
-  updateUserValidationObject,
-} from '../middlewares/users';
+import { loginUserValidationObject, postUserValidationObject, updateUserValidationObject } from '../middlewares/users';
 import {
   addQuery,
   deleteQuery,
@@ -29,9 +25,7 @@ export const postUser = async (
   }
   const hashed_password: string = await argon2.hash(password);
 
-  const error: Joi.ValidationError | undefined = Joi.object(
-    postUserValidationObject
-  ).validate(
+  const error: Joi.ValidationError | undefined = Joi.object(postUserValidationObject).validate(
     { username, hashed_password, nom, prenom, role_id },
     { abortEarly: false }
   ).error;
@@ -127,9 +121,7 @@ export const updateUser = (req: Request, res: Response) => {
         return res.status(404).json({ ok: !ok, message: 'no record' });
       }
 
-      const error: Joi.ValidationError | undefined = Joi.object(
-        updateUserValidationObject
-      ).validate(req.body, {
+      const error: Joi.ValidationError | undefined = Joi.object(updateUserValidationObject).validate(req.body, {
         abortEarly: false,
       }).error;
       if (error) {
@@ -176,10 +168,7 @@ export const deleteUser = (req: Request, res: Response) => {
 // LOGIN USER
 export const loginUser = (req: Request, res: Response) => {
   const { username, password } = req.body;
-  const error = Joi.object(loginUserValidationObject).validate(
-    { username, password },
-    { abortEarly: false }
-  ).error;
+  const error = Joi.object(loginUserValidationObject).validate({ username, password }, { abortEarly: false }).error;
 
   if (error) {
     console.error(error);
