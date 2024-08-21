@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6", // ou es2015, es2020, etc.
+    "module": "commonjs", // ou es6, etc.
+    "outDir": "./dist", // dossier de sortie pour les fichiers JavaScript compilés
+    "rootDir": "./src", // dossier de source pour les fichiers TypeScript
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*.ts"], // inclut tous les fichiers .ts dans le dossier src
+  "exclude": ["node_modules", "migrations"] // exclut node_modules et migrations
+}

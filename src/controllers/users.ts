@@ -40,8 +40,8 @@ export const postUser = async (
         return res.status(403).json({ ok: !ok, message: 'User already exist' });
       } else {
         addQuery(table, { username, hashed_password, nom, prenom, role_id })
-          .then(([result]) => {
-            return res.status(201).json({ ok, result });
+          .then(([results]) => {
+            return res.status(201).json({ ok, results });
           })
           .catch((error) => {
             return res.status(500).json({ ok: !ok, error });
@@ -153,7 +153,7 @@ export const deleteUser = (req: Request, res: Response) => {
         return res.status(404).json({ ok: !ok, message: 'no record' });
       }
       deleteQuery(table, id)
-        .then(([result]) => {
+        .then(([results]) => {
           return res.status(200).json({ ok, results });
         })
         .catch((error) => {
@@ -183,7 +183,7 @@ export const loginUser = (req: Request, res: Response) => {
       const match = await argon2.verify(hashed_password, password);
       if (match) {
         const { nom, prenom, role_id } = result[0];
-        return res.status(202).json({ ok, result: { nom, prenom, role_id } });
+        return res.status(202).json({ ok, results: [{ nom, prenom, role_id }] });
       }
       return res.status(403).json({ ok: !ok, message: 'invalid password' });
     })

@@ -5,7 +5,8 @@
   "main": "./src/app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node build/app.js",
+    "build":"npx tsc -p ./tsconfig.json",
+    "start": "node dist/app.js",
     "dev": "nodemon -e ts,json ./src/app.ts",
     "dbup": "db-migrate up",
     "dbdown": "db-migrate down",
