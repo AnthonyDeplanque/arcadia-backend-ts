@@ -10,7 +10,7 @@ import {
   getQuery,
   updateQuery,
 } from '../models/SQL/sqlQueries';
-import { ok } from './controller';
+import { ok } from './genericController';
 
 const table = 'UTILISATEUR';
 

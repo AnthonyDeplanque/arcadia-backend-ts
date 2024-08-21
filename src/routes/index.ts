@@ -5,7 +5,10 @@ import { serviceRoute } from './routes/service';
 import { imageRoute } from './routes/image';
 import { avisRoute } from './routes/avis';
 import { raceRoute } from './routes/race';
-import { teapot } from '../controllers/teapot';
+import { animalRoute } from './routes/animal';
+import { rapportVeterinaireRoute } from './routes/rapportVeterinaire';
+import { comporteRoute } from './routes/comporte';
+import { contientRoute } from './routes/contient';
 
 const router = (app: Application) => {
   app.get('/', (req: Request, res: Response) => {
@@ -17,8 +20,10 @@ const router = (app: Application) => {
   app.use('/image', imageRoute);
   app.use('/avis', avisRoute);
   app.use('/race', raceRoute);
-  // app.use('/animal');
-  app.get('/rapport_veterinaire', teapot);
+  app.use('/animal', animalRoute);
+  app.use('/rapport_veterinaire', rapportVeterinaireRoute);
+  app.use('/contient', contientRoute);
+  app.use('/comporte', comporteRoute);
 };
 
 export { router };

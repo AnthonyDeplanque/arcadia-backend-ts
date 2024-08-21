@@ -3,7 +3,7 @@ import {
   postRapportVeterinaireValidationObject,
   updateRapportVeterinaireValidationObject,
 } from '../../middlewares/rapportVeterinaire';
-import { getController, postController, updateController, deleteController } from '../../controllers/controller';
+import { getController, postController, updateController, deleteController } from '../../controllers/genericController';
 import { habitatRoute } from './habitat';
 
 export const rapportVeterinaireRoute = Router();

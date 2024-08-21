@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { deleteController, getController, postController, updateController } from '../../controllers/controller';
+import { deleteController, getController, postController, updateController } from '../../controllers/genericController';
 import { postRaceValidationObject, updateRaceValidationObject } from '../../middlewares/race';
 
 export const raceRoute = Router();

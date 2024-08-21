@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getController, postController, updateController, deleteController } from '../../controllers/controller';
+import { getController, postController, updateController, deleteController } from '../../controllers/genericController';
 import { postServiceValidationObject, updateServiceValidationObject } from '../../middlewares/service';
 
 const table = 'SERVICE';

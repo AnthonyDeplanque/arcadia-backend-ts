@@ -28,3 +28,50 @@ export const deleteQuery = (table: string, id: string): Promise<any> => {
 export const getOneUserByItsUsernameQuery = (username: string): Promise<any> => {
   return db.query(`SELECT * FROM UTILISATEUR WHERE username = ?`, [username]);
 };
+
+
+// junction tables specific queries
+
+export const getContentByAnimalIdQuery = (animalId: string,): Promise<any> => {
+  return db.query(`
+    SELECT * FROM contient 
+    WHERE animal_id = ?
+  `, [animalId]);
+};
+
+export const getContentByImageIdQuery = (imageId: string): Promise<any> => {
+  return db.query(`
+    SELECT * FROM contient
+    WHERE image_id = ?
+  `, [imageId]);
+};
+
+export const deleteContentByItsIdsQuery = (imageId: string, animalId: string): Promise<any> => {
+  return db.query(`
+    DELETE FROM contient
+    WHERE image_id = ? 
+    AND animal_id = ?
+    `, [imageId, animalId]);
+};
+
+export const getInvolveByHabitatIdQuery = (habitatId: string): Promise<any> => {
+  return db.query(`
+    SELECT * FROM comporte
+    WHERE habitat_id = ?
+    `, [habitatId]);
+};
+
+export const getInvolveByImageIdQuery = (imageId: string): Promise<any> => {
+  return db.query(`
+    SELECT * FROM comporte
+    WHERE image_id = ?
+    `, [imageId]);
+};
+
+export const deleteInvolveByItsIdsQuery = (habitatId: string, imageId: string): Promise<any> => {
+  return db.query(`
+    DELETE FROM compotre
+    WHERE image_id = ?
+    AND habitat_id = ?
+    `, [imageId, habitatId]);
+};

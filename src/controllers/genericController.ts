@@ -4,7 +4,7 @@ import Joi from 'joi';
 
 export const ok = true;
 
-const handleError = (res: Response, error: any, statusCode?: number) => {
+export const handleError = (res: Response, error: any, statusCode?: number) => {
   console.error(error);
   return res.status(statusCode ? statusCode : 500).json({ ok: !ok, error });
 };

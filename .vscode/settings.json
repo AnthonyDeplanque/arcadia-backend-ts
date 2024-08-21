@@ -1,7 +1,7 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": true // Cela s'assure que ESLint corrige automatiquement les erreurs
+    "source.fixAll": "always" // Cela s'assure que ESLint corrige automatiquement les erreurs
   },
   "eslint.format.enable": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
